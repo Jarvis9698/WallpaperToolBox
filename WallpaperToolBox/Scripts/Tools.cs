@@ -16,6 +16,7 @@ using System.Reflection;
 using Scripting;
 
 using File = System.IO.File;
+using Sunny.UI.Win32;
 
 namespace WallpaperToolBox
 {
@@ -76,7 +77,7 @@ namespace WallpaperToolBox
                 result.previewImage = LoadImage(dirPath + result.preview, SettingManager.PreviewImageSize);
 
                 FileSystemObject file = new FileSystemObject();
-                result.dirSize = GetDirSize((float)file.GetFolder(dirPath).Size);
+                result.dirSize = (float)file.GetFolder(dirPath).Size;
 
                 FileInfo fileInfo = new FileInfo(jsonPath);
                 result.lastWriteTime = fileInfo.LastWriteTime;
@@ -104,14 +105,31 @@ namespace WallpaperToolBox
         /// </summary>
         public static Bitmap LoadImage(string path, int size)
         {
-            Image image = Image.FromFile(path);
+            return LoadImage(path, new Size(size, size));
+        }
+
+        public static Bitmap LoadImage(string path, Size size)
+        {
+            if (!File.Exists(path))
+            {
+                path = SettingManager.currentDirectoryPath + "Images\\image_error.png";
+            }
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            Image image = Image.FromStream(fileStream);
             if (Path.GetExtension(path) == ".gif")
             {
                 FrameDimension fd = new FrameDimension(image.FrameDimensionsList[0]);
                 int count = image.GetFrameCount(fd);
                 image.SelectActiveFrame(fd, count / 4);
             }
-            return new Bitmap(image, size, size);
+            fileStream.Close();
+
+            return new Bitmap(image, size);
         }
 
         /// <summary>
@@ -139,83 +157,6 @@ namespace WallpaperToolBox
             return result;
         }
         #endregion I/O
-
-        #region 滚动列表功能
-        /// <summary>
-        /// 更新单个壁纸已选下标
-        /// </summary>
-        public static void UpdateSelectIndexList(List<int> indexList, int index, bool isSelect)
-        {
-            if (isSelect && !indexList.Contains(index))
-            {
-                indexList.Add(index);
-            }
-            else if (!isSelect)
-            {
-                indexList.Remove(index);
-            }
-        }
-
-        /// <summary>
-        /// 更新范围内的已选下标
-        /// </summary>
-        public static void UpdateSelectRange(List<int> indexList, int startIndex, int endIndex, bool isSelect)
-        {
-            for (int i = startIndex; i <= endIndex; i++)
-            {
-                UpdateSelectIndexList(indexList, i, isSelect);
-            }
-        }
-
-        /// <summary>
-        /// 列表全选 / 全不选
-        /// </summary>
-        public static void DataGridViewSelectAll(ref UIDataGridView view, List<Wallpaper> viewList, List<int> indexList)
-        {
-            bool isSelectAll = true;
-            if (indexList.Count == viewList.Count)
-            {
-                isSelectAll = false;
-            }
-
-            DataGridViewCheckBoxCell chekBox;
-            for (int i = 0; i < viewList.Count; i++)
-            {
-                chekBox = (DataGridViewCheckBoxCell)view.Rows[i].Cells[0];
-                chekBox.Value = isSelectAll;
-                chekBox.EditingCellFormattedValue = isSelectAll;
-                UpdateSelectIndexList(indexList, i, isSelectAll);
-            }
-        }
-
-        #endregion 滚动列表功能
-
-        /// <summary>
-        /// 计算目录大小
-        /// </summary>
-        public static string GetDirSize(float size = 0)
-        {
-            string result;
-            int i = 0;
-            for (i = 0; size >= 1000; i++)
-            {
-                size /= 1024;
-            }
-            result = size.ToString("#0.0");
-
-            string unit = "KB";
-            if (i == 2)
-            {
-                unit = "MB";
-            }
-            else if (i == 3)
-            {
-                unit = "GB";
-            }
-            result += unit;
-
-            return result;
-        }
 
         /// <summary>
         /// 获取限制字节长度的字符串

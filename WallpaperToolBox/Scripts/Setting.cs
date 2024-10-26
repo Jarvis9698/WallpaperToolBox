@@ -10,6 +10,7 @@ using Sunny.UI;
 using System.Threading;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 
 namespace WallpaperToolBox
 {
@@ -49,7 +50,7 @@ namespace WallpaperToolBox
     internal class SettingManager
     {
         #region 常量
-        public const string Version = "0.1.5";
+        public static string Version { get;  private set; }
 
         public const string TitleText = "Wallpaper工具箱 - v";
         public const string UnpackDirectorySuffix = "_unpack";
@@ -57,7 +58,7 @@ namespace WallpaperToolBox
 
         public const int PreviewRowsHeight = 100;
         public const int PreviewImageSize = 96;
-        public const int PreviewContentPictureSize = 150;
+        public const int PreviewInformationPictureSize = 150;
 
         #region 常量_提示
 
@@ -66,9 +67,12 @@ namespace WallpaperToolBox
         public const string PreviewUnpackPathEmptyTip = "请设置壁纸解包后的存放目录！";
         public const string PreviewToBackupSelectEmptyTip = "请勾选需要添加到官方备份目录的壁纸";
         public const string PreviewToBackupPathEmptyTip = "请设置官方备份的目录！";
+        public const string PreviewLocalBackupPathEmptyTip = "请设置本地备份目录！";
         public const string PreviewContentratingEmptyTip = "无年龄分级";
         public const string PreviewTypeEmptyTip = "无壁纸类型";
         public const string PreviewContentTip = "左键查看\n左键双击打开目录\n右键勾选\nshift+右键范围勾选\nctrl+右键范围取消";
+        public const string PreviewContentTip_2 = "左键单击选择\n双击打开目录\n单击列表第一列可勾选/取消勾选";
+        public const string FileNullErrorTip = "文件不存在！";
 
         #region 常量_提示_设置页面
         public const string SettingStoreSelectDirViewTip = "请选择创意工坊壁纸的存放目录";
@@ -87,6 +91,12 @@ namespace WallpaperToolBox
         public const string SettingUnpackEmptyPathTip = "使用右侧按钮打开壁纸解包后的存放目录，或直接将目录拖入此处。";
         public const string SettingUnpackWaitLoadTip = "请等待解包后的壁纸文件读取完成";
         #endregion 常量_提示_设置页面
+
+        #region 常量_提示_本地备份管理页面_差异变更管理页面
+        public const string DataGridViewEmptyTip = "未发现有变更的壁纸\n可以按下重新读取并刷新列表\n或检查下过滤选项\n和设置的路径";
+        public const string SyncSelectEmptyTip = "未勾选需要同步的壁纸";
+        public const string RollbackSelectEmptyTip = "未勾选需要撤销更改的壁纸";
+        #endregion 常量_提示_本地备份管理页面_差异变更管理页面
 
         #region 常量_提示_解包页面
         public const string StoreViewEmptyTip = "一张壁纸都没找到\n可以按下刷新试试\n或检查下过滤选项\n和设置的路径";
@@ -113,11 +123,18 @@ namespace WallpaperToolBox
         private static string m_UserPCName;
 
         #region 接口
+        public SettingManager()
+        {
+        }
+
         public static void Init()
         {
             currentDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
             m_SettingFilePath = currentDirectoryPath + "Setting.json";
             m_UserPCName = SystemInformation.ComputerName;
+
+            // 获取版本号
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             if (!File.Exists(m_SettingFilePath))
             {
@@ -165,110 +182,112 @@ namespace WallpaperToolBox
     }
 
     /// <summary>
-    /// 壁纸预览列表
+    /// 壁纸展示按钮管理类，用于预览列表
+    /// <para>===该类暂时无用，留作备用===</para>
     /// </summary>
-    public class WallpaperDataGridView : WallpaperFlowPanelBase
+    public class WallpaperHeaderButton
     {
-        UIDataGridView m_AddGridView;
-        UIDataGridViewFooter m_AddGridViewFooter;
-        List<Wallpaper> m_AddList = new List<Wallpaper>();
-        List<int> m_AddSelectedIndexList = new List<int>();
+        protected UIFlowLayoutPanel m_panel;
+        protected UIHeaderButton m_Btn;
 
-        UIDataGridView m_ChangedGridView;
-        UIDataGridViewFooter m_ChangedGridViewFooter;
-        List<Wallpaper> m_ChangedList = new List<Wallpaper>();
-        List<int> m_ChangedSelectedIndexList = new List<int>();
+        /// <summary>
+        /// 壁纸ID
+        /// </summary>
+        public string wallpaperID { get; protected set; }
+        /// <summary>
+        /// 若已勾选
+        /// </summary>
+        public bool isSelected { get; protected set; } = false;
 
-        UIDataGridView m_DelGridView;
-        UIDataGridViewFooter m_DelGridViewFooter;
-        List<Wallpaper> m_DelList = new List<Wallpaper>();
-        List <int> m_DelSelectedIndexList = new List<int>();
-
-        #region 接口
-        public override void Init(
-            UIForm uIForm,
-            UIProcessBar processBar,
-            WallpaperLoader wallpaperLoader,
-            UISwitch everySwitch,
-            UISwitch questionableSwitch,
-            UISwitch matureSwitch)
+        public WallpaperHeaderButton(UIFlowLayoutPanel panel,
+            Action<WallpaperHeaderButton, EventArgs> onClick,
+            Action<WallpaperHeaderButton, EventArgs> onDoubleClick)
         {
-            base.Init(uIForm, processBar, wallpaperLoader, everySwitch, questionableSwitch, matureSwitch);
-            isInited = false;
+            m_panel = panel;
+            m_Btn = new UIHeaderButton();
+            int size = SettingManager.PreviewRowsHeight;
+            int top = (size - SettingManager.PreviewImageSize) / 2;
+
+            m_Btn.Name = "error";
+            m_Btn.Size = new Size(size, size + 20);
+            m_Btn.ImageTop = top;
+            m_Btn.Font = new Font("微软雅黑", 8f);
+            m_Btn.ForeHoverColor = Color.FromArgb(90, 90, 90);
+            m_Btn.ForePressColor = Color.FromArgb(64, 64, 64);
+            m_Btn.ForeSelectedColor = Color.FromArgb(64, 64, 64);
+
+            m_Btn.Style = UIStyle.Custom;
+            m_Btn.StyleCustomMode = true;
+            m_Btn.FillColor = Color.FromArgb(115, 115, 115);
+            m_Btn.FillDisableColor = Color.FromArgb(115, 115, 115);
+            m_Btn.FillHoverColor = Color.FromArgb(215, 215, 215);
+            m_Btn.FillPressColor = Color.FromArgb(250, 250, 250);
+            m_Btn.FillSelectedColor = Color.FromArgb(250, 250, 250);
+
+            // 勾选图标设置
+            m_Btn.ShowTips = true;
+            // 勾选图标底色
+            m_Btn.TipsColor = Color.FromArgb(255, 185, 0);
+            // 勾选图标文本颜色
+            m_Btn.TipsForeColor = Color.Black;
+
+            // 按钮事件注册
+            m_Btn.Click += (object sender, EventArgs e) =>
+            {
+                onClick(this, e);
+            };
+            m_Btn.UseDoubleClick = true;
+            m_Btn.DoubleClick += (object sender, EventArgs e) =>
+            {
+                onDoubleClick(this, e);
+            };
+
+            m_panel.Add(m_Btn);
+        }
+
+        public void Destory()
+        {
+            isSelected = false;
+            m_panel.Remove(m_Btn);
+        }
+
+        public void Update(Wallpaper wallpaper)
+        {
+            m_Btn.Image = wallpaper.previewImage;
+            m_Btn.Name = wallpaper.title;
+            m_Btn.Text = Tools.GetStringWithByteLength(wallpaper.title, 16);
+            wallpaperID = wallpaper.id;
+            m_Btn.Selected = false;
         }
 
         /// <summary>
-        /// 初始化托管的滑动列表
+        /// 勾选或取消勾选
         /// </summary>
-        public void InitClass(UIDataGridView addGridView, UIDataGridViewFooter addFooter,
-            UIDataGridView changedGridView, UIDataGridViewFooter changedFooter,
-            UIDataGridView delGridView, UIDataGridViewFooter delFooter)
+        public void ChangeSelected()
         {
-            m_AddGridView = addGridView;
-            m_AddGridViewFooter = addFooter;
-
-            m_ChangedGridView = changedGridView;
-            m_ChangedGridViewFooter = changedFooter;
-
-            m_DelGridView = delGridView;
-            m_DelGridViewFooter = delFooter;
-
-            InitDataGridView();
-            isInited = true;
-        }
-        #endregion 接口
-
-        private void InitDataGridView()
-        {
-            m_AddGridView.Rows.Clear();
-            m_AddGridView.Rows[0].Height = SettingManager.PreviewRowsHeight;
-            m_AddGridView.Rows[0].Cells[1].Value = "114514";
-            m_AddGridView.Rows[0].Cells[2].Value = SettingManager.StoreViewEmptyTip;
-            Image image = Image.FromFile(SettingManager.currentDirectoryPath + "Images\\image_1.jpg");
-            Bitmap bitmap = new Bitmap(image, SettingManager.PreviewImageSize, SettingManager.PreviewImageSize);
-            m_AddGridView.Rows[0].Cells[5].Value = bitmap;
-
-            m_AddGridViewFooter.Clear();
-            m_ProgressBar.Hide();
-            panelUpdateState = VieweUpdateState.Updated;
+            isSelected = !isSelected;
+            OnSelectedChanged();
         }
 
-        #region 后台
-        protected override void LoadProgressWorker_DoWork(object sender, DoWorkEventArgs e)
+        /// <summary>
+        /// 设置勾选状态
+        /// </summary>
+        public void SetSelected(bool selected)
         {
-            // 前面95%进度用于读取壁纸数据
-            while (m_WallpaperLoader.isLoading)
+            isSelected = selected;
+            OnSelectedChanged();
+        }
+
+        protected void OnSelectedChanged()
+        {
+            if (isSelected)
             {
-                m_LoadProgressWorker.ReportProgress((int)(m_WallpaperLoader.loadingProgress * 0.95f));
-                Thread.Sleep(10);
+                m_Btn.TipsText = "✔";
             }
-
-            m_AddList = ((WallpaperChanger)m_WallpaperLoader).GetAddViewList(
-                m_EverySwitch.Active,
-                m_QuestionableSwitch.Active,
-                m_MatureSwitch.Active);
-
-            // 后面5%进度用于刷新列表
-            int progress = 0;
-            while (panelUpdateState != VieweUpdateState.Updated)
+            else
             {
-                m_LoadProgressWorker.ReportProgress(progress);
-
-                progress += 100;
-                Thread.Sleep(50);
+                m_Btn.TipsText = string.Empty;
             }
         }
-
-        // 加载后台同步进度
-        protected override void LoadProgressWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            int progress = e.ProgressPercentage;
-
-
-        }
-        #endregion 后台
-
-        #region UI事件
-        #endregion UI事件
     }
 }

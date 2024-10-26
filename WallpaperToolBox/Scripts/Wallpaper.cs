@@ -61,7 +61,7 @@ namespace WallpaperToolBox
         /// <summary>
         /// 目录大小
         /// </summary>
-        public string dirSize { get; set; }
+        public float dirSize { get; set; }
         /// <summary>
         /// 预览图
         /// </summary>
@@ -70,6 +70,34 @@ namespace WallpaperToolBox
         /// 最后修改时间
         /// </summary>
         public DateTime lastWriteTime { get; set; }
+
+        /// <summary>
+        /// 获取目录大小文本（自带单位，保留小数点后一位）
+        /// </summary>
+        public string GetDirSizeText()
+        {
+            float size = dirSize;
+            string result;
+            int i = 0;
+            for (i = 0; size >= 1000; i++)
+            {
+                size /= 1024;
+            }
+            result = size.ToString("#0.0");
+
+            string unit = "KB";
+            if (i == 2)
+            {
+                unit = "MB";
+            }
+            else if (i == 3)
+            {
+                unit = "GB";
+            }
+            result += unit;
+
+            return result;
+        }
     }
 
     public class WallpaperLoader
@@ -137,6 +165,9 @@ namespace WallpaperToolBox
             {
                 return;
             }
+
+            wallpaperList.Clear();
+            BeforeLoading();
             if (string.IsNullOrEmpty(loadPath) || !Directory.Exists(loadPath))
             {
                 isLoaded = true;
@@ -144,17 +175,24 @@ namespace WallpaperToolBox
             }
 
             isLoading = true;
-            wallpaperList.Clear();
-
+            loadingProgress = 0;
             m_WallpaperLoadTask = new Task(LoadTask);
             m_WallpaperLoadTask.Start();
+        }
+
+        /// <summary>
+        /// 启动加载线程之前执行
+        /// </summary>
+        protected virtual void BeforeLoading()
+        {
+
         }
 
         protected virtual void LoadTask()
         {
             DirectoryInfo[] dirInfo = new DirectoryInfo(loadPath).GetDirectories();
             int maxProgress = dirInfo.Length;
-            for (int i = 0; i < dirInfo.Length; i++)
+            for (int i = 0; i < maxProgress; i++)
             {
                 Wallpaper wallpaper = Tools.LoadWallpaperValue(dirInfo[i]);
                 if (wallpaper != null)
@@ -162,9 +200,10 @@ namespace WallpaperToolBox
                     wallpaperList.Add(wallpaper);
                 }
 
-                loadingProgress = 100 * i / maxProgress;
+                loadingProgress = 100 * (i + 1) / maxProgress;
             }
 
+            loadingProgress = 100;
             isLoading = false;
             isLoaded = true;
             System.GC.Collect();
@@ -172,7 +211,7 @@ namespace WallpaperToolBox
         }
 
         /// <summary>
-        /// 移除壁纸
+        /// 移除壁纸（不删除文件）
         /// </summary>
         public virtual void Remove(List<Wallpaper> removeList)
         {
@@ -185,7 +224,7 @@ namespace WallpaperToolBox
         /// <summary>
         /// 根据过滤选项获取用于展示的壁纸数据
         /// </summary>
-        public List<Wallpaper> GetViewList(bool isEveryone, bool isQuestionable, bool isMature)
+        public List<Wallpaper> GetViewList(bool isEveryone, bool isQuestionable, bool isMature, WallpaperSortType sortType = WallpaperSortType.None)
         {
             List<Wallpaper> result = new List<Wallpaper>();
             string contentrating;
@@ -208,17 +247,85 @@ namespace WallpaperToolBox
                 }
             }
 
+            #region 排序
+            if (sortType == WallpaperSortType.Name)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.title.CompareTo(y.title);
+                });
+            }
+            else if (sortType == WallpaperSortType.UnName)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.title.CompareTo(y.title);
+                });
+                result.Reverse();
+            }
+            else if (sortType == WallpaperSortType.Size)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.dirSize.CompareTo(y.dirSize);
+                });
+                result.Reverse();
+            }
+            else if (sortType == WallpaperSortType.UnSize)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.dirSize.CompareTo(y.dirSize);
+                });
+            }
+            else if (sortType == WallpaperSortType.UpdatedDate)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.lastWriteTime.CompareTo(y.lastWriteTime);
+                });
+                result.Reverse();
+            }
+            else if (sortType == WallpaperSortType.UnUpdatedDate)
+            {
+                result.Sort((x, y) =>
+                {
+                    return x.lastWriteTime.CompareTo(y.lastWriteTime);
+                });
+            }
+            #endregion 排序
+
             return result;
         }
     }
 
     public class WallpaperChanger : WallpaperLoader
     {
+        /// <summary>
+        /// 新增壁纸总列表
+        /// </summary>
+        public List<Wallpaper> newWallpaperList = new List<Wallpaper>();
+        /// <summary>
+        /// 变更壁纸总列表
+        /// </summary>
+        public List<Wallpaper> changedWallpaperList = new List<Wallpaper>();
+        /// <summary>
+        /// 已删除壁纸总列表
+        /// </summary>
+        public List<Wallpaper> delWallpaperList = new List<Wallpaper>();
+
+        /// <summary>
+        /// 0-订阅壁纸加载器，1-本地备份壁纸加载器，2-官方备份壁纸加载器
+        /// </summary>
         WallpaperLoader[] m_Loaders;
 
-        public override void Init(string path)
+        /// <summary>
+        /// 初始化
+        /// <para>参数path无用，默认null，不需要输入</para>
+        /// </summary>
+        public override void Init(string path = null)
         {
-            base.Init(path);
+            base.Init(WallpaperManager.localBackupLoader.loadPath);
 
             m_Loaders = new WallpaperLoader[]
             {
@@ -232,6 +339,14 @@ namespace WallpaperToolBox
             }
         }
 
+        protected override void BeforeLoading()
+        {
+            newWallpaperList.Clear();
+            changedWallpaperList.Clear();
+            delWallpaperList.Clear();
+        }
+
+        // 该线程负责读取订阅、本低备份和官方备份壁纸，并比对
         protected override void LoadTask()
         {
             // 确保壁纸都已加载
@@ -243,6 +358,7 @@ namespace WallpaperToolBox
                 }
             }
 
+            // 90%进度用于读取壁纸
             bool isLoadersLoaded = false;
             int loadersProgress;
             while (!isLoadersLoaded)
@@ -260,9 +376,37 @@ namespace WallpaperToolBox
                     loadersProgress += m_Loaders[i].loadingProgress;
                 }
 
-                loadingProgress = loadersProgress / m_Loaders.Length;
+                loadingProgress = (int)(0.9f * loadersProgress / m_Loaders.Length);
             }
 
+            // 剩下10%进度用于比对变更
+            var storeWallpapersDic = GetWallpaperDic();
+            var localWallpaperList = WallpaperManager.localBackupLoader.wallpaperList;
+            for (int i = 0; i < localWallpaperList.Count; i++)
+            {
+                if (storeWallpapersDic.ContainsKey(localWallpaperList[i].id))
+                {
+                    if (storeWallpapersDic[localWallpaperList[i].id].lastWriteTime 
+                        > localWallpaperList[i].lastWriteTime)
+                    {
+                        // 更改的壁纸
+                        changedWallpaperList.Add(storeWallpapersDic[localWallpaperList[i].id]);
+                    }
+
+                    storeWallpapersDic.Remove(localWallpaperList[i].id);
+                }
+                else
+                {
+                    // 移除的壁纸
+                    delWallpaperList.Add(localWallpaperList[i]);
+                }
+
+                loadingProgress = 90 + 9 * (i + 1) / localWallpaperList.Count;
+            }
+            // 新增的壁纸
+            newWallpaperList = storeWallpapersDic.Values.ToList();
+
+            loadingProgress = 100;
             isLoading = false;
             isLoaded = true;
             System.GC.Collect();
@@ -293,65 +437,58 @@ namespace WallpaperToolBox
         }
 
         /// <summary>
-        /// 获取新增壁纸列表
+        /// 准备全部重载(全部加载器)
         /// </summary>
-        public List<Wallpaper> GetAddViewList(bool isEveryone, bool isQuestionable, bool isMature)
+        public void WaitForReloadAll()
         {
-            var localList = WallpaperManager.localBackupLoader.wallpaperList;
-            var wallpaperDic = GetWallpaperDic();
-
-            for (int i = 0; i < localList.Count; i++)
+            WaitForReload();
+            for (int i = 0; i < m_Loaders.Length; i++)
             {
-                if (wallpaperDic.ContainsKey(localList[i].id))
-                {
-                    wallpaperDic.Remove(localList[i].id);
-                }
+                m_Loaders[i].WaitForReload();
             }
-            wallpaperList = wallpaperDic.Values.ToList();
-            return GetViewList(isEveryone, isQuestionable, isMature);
         }
 
         /// <summary>
-        /// 获取修改壁纸列表
+        /// 获取用于展示的壁纸字典
         /// </summary>
-        public List<Wallpaper> GetChangedViewList(bool isEveryone, bool isQuestionable, bool isMature)
+        private Dictionary<string, Wallpaper> GetViewDic(List<Wallpaper> list, bool isEveryone, bool isQuestionable, bool isMature)
         {
-            var localList = WallpaperManager.localBackupLoader.wallpaperList;
-            var wallpaperDic = GetWallpaperDic();
-            wallpaperList = new List<Wallpaper>();
+            var result = new Dictionary<string, Wallpaper>();
+            string contentrating;
 
-            for (int i = 0; i < localList.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                if (!wallpaperDic.ContainsKey(localList[i].id))
+                contentrating = list[i].contentrating;
+                if (isQuestionable && contentrating == Contentrating.Questionable)
                 {
-                    continue;
+                    result.Add(list[i].id, list[i]);
                 }
-
-                if (wallpaperDic[localList[i].id].lastWriteTime > localList[i].lastWriteTime)
+                else if (isMature && contentrating == Contentrating.Mature)
                 {
-                    wallpaperList.Add(localList[i]);
+                    result.Add(list[i].id, list[i]);
+                }
+                else if (isEveryone && (contentrating != Contentrating.Questionable && contentrating != Contentrating.Mature))
+                {
+                    result.Add(list[i].id, list[i]);
                 }
             }
-            return GetViewList(isEveryone, isQuestionable, isMature);
+
+            return result;
         }
 
-        /// <summary>
-        /// 获取移除壁纸列表
-        /// </summary>
-        public List<Wallpaper> GetDelViewList(bool isEveryone, bool isQuestionable, bool isMature)
+        public Dictionary<string, Wallpaper> GetNewViewDic(bool isEveryone, bool isQuestionable, bool isMature)
         {
-            var localList = WallpaperManager.localBackupLoader.wallpaperList;
-            var wallpaperDic = GetWallpaperDic();
-            wallpaperList = new List<Wallpaper>();
+            return GetViewDic(newWallpaperList, isEveryone, isQuestionable, isMature);
+        }
 
-            for (int i = 0; i < localList.Count; i++)
-            {
-                if (!wallpaperDic.ContainsKey(localList[i].id))
-                {
-                    wallpaperList.Add(localList[i]);
-                }
-            }
-            return GetViewList(isEveryone, isQuestionable, isMature);
+        public Dictionary<string, Wallpaper> GetChangedViewDic(bool isEveryone, bool isQuestionable, bool isMature)
+        {
+            return GetViewDic(changedWallpaperList, isEveryone, isQuestionable, isMature);
+        }
+
+        public Dictionary<string, Wallpaper> GetDelViewDic(bool isEveryone, bool isQuestionable, bool isMature)
+        {
+            return GetViewDic(delWallpaperList, isEveryone, isQuestionable, isMature);
         }
     }
 
@@ -389,7 +526,7 @@ namespace WallpaperToolBox
             backupLoader.Init(SettingManager.setting.backupPath);
             unpackLoader.Init(SettingManager.setting.unpackPath);
 
-            wallpaperChanger.Init(SettingManager.setting.localBackupPath);
+            wallpaperChanger.Init();
         }
     }
 }

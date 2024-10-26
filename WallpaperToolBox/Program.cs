@@ -19,6 +19,7 @@ namespace WallpaperToolBox
             Application.SetCompatibleTextRenderingDefault(false);
             SettingManager.Init();
             WallpaperManager.Init();
+            // 打开窗口前确保必要管理器已启动
             Application.Run(new MainWindow());
         }
     }
