@@ -1,0 +1,177 @@
+<mxfile host="Electron" modified="2024-04-10T02:31:03.525Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="qo9KUHcz3dPEyAJu8UqK" version="23.1.5" type="device">
+  <diagram name="第 1 页" id="vTjbPD-F5IoWp81Ax1Kv">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="g17RK9lRx43y5ga2B-dv-1" value="用户" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry y="410" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-3" value="设置壁纸分级" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="160" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-4" value="查看壁纸详细信息" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="40" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-5" value="打开壁纸目录" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-6" value="选择壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="580" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-7" value="范围勾选壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="640" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-8" value="取消选择壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="760" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-9" value="范围取消选择壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="760" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-10" value="重新读取并刷新列表" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-11" value="全选、取消全选壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="520" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-12" value="解包壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="480" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-13" value="删除壁纸" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="580" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-14" value="添加壁纸到&lt;br&gt;官方备份目录" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="680" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-15" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="440" as="sourcePoint" />
+            <mxPoint x="420" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-16" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="283" as="sourcePoint" />
+            <mxPoint x="201" y="233" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-17" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="293" as="sourcePoint" />
+            <mxPoint x="211" y="243" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-18" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="303" as="sourcePoint" />
+            <mxPoint x="221" y="253" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-19" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="313" as="sourcePoint" />
+            <mxPoint x="231" y="263" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-20" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="323" as="sourcePoint" />
+            <mxPoint x="241" y="273" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-21" value="" style="endArrow=open;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-1" target="g17RK9lRx43y5ga2B-dv-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="333" as="sourcePoint" />
+            <mxPoint x="251" y="283" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-23" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-7" target="g17RK9lRx43y5ga2B-dv-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="540" as="sourcePoint" />
+            <mxPoint x="450" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-26" value="包含&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-23">
+          <mxGeometry x="-0.038" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-24" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-9" target="g17RK9lRx43y5ga2B-dv-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="309" y="682" as="sourcePoint" />
+            <mxPoint x="471" y="658" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-27" value="包含" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-24">
+          <mxGeometry y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-28" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-12" target="g17RK9lRx43y5ga2B-dv-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="540" as="sourcePoint" />
+            <mxPoint x="380" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-29" value="扩展" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-28">
+          <mxGeometry x="-0.0002" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-30" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-13" target="g17RK9lRx43y5ga2B-dv-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="679" y="591" as="sourcePoint" />
+            <mxPoint x="581" y="629" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-31" value="扩展" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-30">
+          <mxGeometry x="-0.0002" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-32" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-14" target="g17RK9lRx43y5ga2B-dv-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="689" y="601" as="sourcePoint" />
+            <mxPoint x="591" y="639" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-33" value="扩展" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-32">
+          <mxGeometry x="-0.0002" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-34" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-11" target="g17RK9lRx43y5ga2B-dv-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="309" y="682" as="sourcePoint" />
+            <mxPoint x="471" y="658" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-35" value="包含&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-34">
+          <mxGeometry x="-0.038" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-36" value="" style="endArrow=open;dashed=1;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-11" target="g17RK9lRx43y5ga2B-dv-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="319" y="692" as="sourcePoint" />
+            <mxPoint x="481" y="668" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-37" value="包含&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g17RK9lRx43y5ga2B-dv-36">
+          <mxGeometry x="-0.038" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-38" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;备注&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;官方备份管理页面不包含该用例&lt;/span&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;size=16;" vertex="1" parent="1">
+          <mxGeometry x="680" y="790" width="80" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g17RK9lRx43y5ga2B-dv-39" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="g17RK9lRx43y5ga2B-dv-38" target="g17RK9lRx43y5ga2B-dv-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="850" as="sourcePoint" />
+            <mxPoint x="700" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
