@@ -123,6 +123,10 @@ namespace WallpaperToolBox
         /// </summary>
         public List<Wallpaper> wallpaperList { get; protected set; } = new List<Wallpaper>();
         /// <summary>
+        /// 加载开始前的回调
+        /// </summary>
+        public event Action OnBeforeLoading;
+        /// <summary>
         /// 加载完成后的回调
         /// </summary>
         public event Action OnLoaded;
@@ -141,7 +145,7 @@ namespace WallpaperToolBox
         /// <summary>
         /// 准备重新加载
         /// </summary>
-        public void WaitForReload()
+        public virtual void WaitForReload()
         {
             if (isLoading)
             {
@@ -185,7 +189,7 @@ namespace WallpaperToolBox
         /// </summary>
         protected virtual void BeforeLoading()
         {
-
+            OnBeforeLoading?.Invoke();
         }
 
         protected virtual void LoadTask()
@@ -219,6 +223,7 @@ namespace WallpaperToolBox
             {
                 wallpaperList.Remove(removeList[i]);
             }
+            OnBeforeLoading?.Invoke();
         }
 
         /// <summary>
@@ -335,7 +340,7 @@ namespace WallpaperToolBox
             };
             for (int i = 0; i < m_Loaders.Length; i++)
             {
-                m_Loaders[i].OnLoaded += WaitForReload;
+                m_Loaders[i].OnBeforeLoading += base.WaitForReload;
             }
         }
 
@@ -437,11 +442,24 @@ namespace WallpaperToolBox
         }
 
         /// <summary>
+        /// 等待重载（会重载所有加载器）
+        /// </summary>
+        public override void WaitForReload()
+        {
+            base.WaitForReload();
+            WaitForReloadAll();
+        }
+
+        /// <summary>
         /// 准备全部重载(全部加载器)
         /// </summary>
         public void WaitForReloadAll()
         {
-            WaitForReload();
+            if (m_Loaders == null)
+            {
+                return;
+            }
+
             for (int i = 0; i < m_Loaders.Length; i++)
             {
                 m_Loaders[i].WaitForReload();

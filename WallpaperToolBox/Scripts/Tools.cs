@@ -17,6 +17,7 @@ using Scripting;
 
 using File = System.IO.File;
 using Sunny.UI.Win32;
+using System.Runtime.InteropServices;
 
 namespace WallpaperToolBox
 {
@@ -25,6 +26,25 @@ namespace WallpaperToolBox
     /// </summary>
     internal static class Tools
     {
+        /// <summary>
+        /// 调用Windows API进行文件操作
+        /// </summary>
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        private static extern int SHFileOperation(ref SHFILEOPSTRUCT FileOp);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        private struct SHFILEOPSTRUCT
+        {
+            public IntPtr hwnd;                // 处理此操作的窗口句柄，可以用 IntPtr.Zero 表示默认窗口。
+            public uint wFunc;                 // 表示执行的操作类型，如删除、复制、移动、重命名等。
+            public string pFrom;               // 要操作的文件或文件夹路径，以双空字符结尾，支持多路径。
+            public string pTo;                 // 目标路径，仅在复制或移动时使用；删除操作设置为空。
+            public short fFlags;               // 控制操作行为的标志位，支持多个选项。
+            public bool fAnyOperationsAborted; // 表示操作是否被用户中止。
+            public IntPtr hNameMappings;       // 重命名时使用的文件名映射指针，删除时可以忽略。
+            public string lpszProgressTitle;   // 操作进度标题，仅在需要进度对话框时使用。
+        }
+
         #region Json处理
         public static string SettingToJson(object obj)
         {
@@ -87,7 +107,7 @@ namespace WallpaperToolBox
 
         #region I/O
         /// <summary>
-        /// 读取文件（没有判断是否存在）
+        /// 读取文件（不判断是否存在）
         /// </summary>
         public static List<string> ReadFile(string path)
         {
@@ -155,6 +175,62 @@ namespace WallpaperToolBox
                 result = Path.GetDirectoryName(path) + "\\";
             }
             return result;
+        }
+
+        /// <summary>
+        /// 删除目录及其所有文件
+        /// </summary>
+        public static void DeleteDirectory(string path)
+        {
+            SHFILEOPSTRUCT fileOp = new SHFILEOPSTRUCT
+            {
+                hwnd = IntPtr.Zero,
+                wFunc = 0x3,// 删除文件
+                pFrom = path + "\0\0",  // 双空字符结尾
+                pTo = null,
+                fFlags = 0x40 | 0x10,// 将文件移动到回收站且不显示对话框
+                fAnyOperationsAborted = false,
+                hNameMappings = IntPtr.Zero,
+                lpszProgressTitle = "Deleting Files..."
+            };
+
+            int result = SHFileOperation(ref fileOp);
+            if (result == 0)
+            {
+                Console.WriteLine("[Tools.DeleteDirectory]删除文件成功");
+            }
+            else
+            {
+                Console.WriteLine("[Tools.DeleteDirectory]删除文件失败，错误代码：" + result);
+            }
+        }
+
+        /// <summary>
+        /// 复制目录及其所有文件
+        /// </summary>
+        public static void CopyDirectory(string pathFrom, string pathTo)
+        {
+            SHFILEOPSTRUCT fileOp = new SHFILEOPSTRUCT
+            {
+                hwnd = IntPtr.Zero,
+                wFunc = 0x2,// 复制文件
+                pFrom = pathFrom + '\0',
+                pTo = pathTo + '\0',
+                fFlags = 0x200 | 0x10,// 自动创建目标文件夹且不显示对话框
+                fAnyOperationsAborted = false,
+                hNameMappings = IntPtr.Zero,
+                lpszProgressTitle = "复制文件夹"
+            };
+
+            int result = SHFileOperation(ref fileOp);
+            if (result == 0)
+            {
+                Console.WriteLine("[Tools.CopyDirectory]复制文件成功");
+            }
+            else
+            {
+                Console.WriteLine("[Tools.CopyDirectory]复制文件失败，错误代码：" + result);
+            }
         }
         #endregion I/O
 

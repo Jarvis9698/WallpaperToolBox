@@ -409,6 +409,10 @@ namespace WallpaperToolBox
             m_ProgressBar.Hide();
 
             m_WallpaperLoader = wallpaperLoader;
+            m_WallpaperLoader.OnLoaded += () =>
+            {
+                panelUpdateState = VieweUpdateState.WaitingForUpdateView;
+            };
 
             // 过滤器初始化
             m_EverySwitch = everySwitch;
@@ -790,7 +794,7 @@ namespace WallpaperToolBox
                 string txt = "将删除：\n" +
                     m_SelectedIndexList.Count + " 个壁纸文件\n" +
                     "注意：\n" +
-                    "未订阅的壁纸删除后将无法恢复！";
+                    "删除的壁纸可以在回收站恢复";
                 if (Tools.ShowAskWarningAskDialog(txt, m_UIForm))
                 {
                     panelUpdateState = VieweUpdateState.WaitingForUpdateView;
@@ -955,12 +959,10 @@ namespace WallpaperToolBox
             m_WallpaperLoader.Remove(selectWallpapers);
             m_DeleteProgressWorker.ReportProgress(0);
 
-            string cmd;
             int progress;
             for (int i = 0; i < selectWallpapers.Count; i++)
             {
-                cmd = "rmdir /s/q \"" + selectWallpapers[i].directoryPath + "\"";
-                Tools.RunCMD(cmd);
+                Tools.DeleteDirectory(selectWallpapers[i].directoryPath);
                 progress = 100 * (i + 1) / selectWallpapers.Count;
                 m_DeleteProgressWorker.ReportProgress(progress);
 
@@ -1056,13 +1058,11 @@ namespace WallpaperToolBox
             }
 
             string backupPath;
-            string cmd;
             int progress;
             for (int i = 0; i < selectWallpapers.Count; i++)
             {
-                backupPath = SettingManager.setting.backupPath + selectWallpapers[i].id + "\\";
-                cmd = "XCOPY \"" + selectWallpapers[i].directoryPath + "\" \"" + backupPath + "\" /e/y";
-                Tools.RunCMD(cmd);
+                backupPath = SettingManager.setting.backupPath + selectWallpapers[i].id + '\\';
+                Tools.CopyDirectory(selectWallpapers[i].directoryPath, backupPath);
 
                 progress = 100 * (i + 1) / selectWallpapers.Count;
                 m_ToBackupProgressWorker.ReportProgress(progress);
@@ -1514,7 +1514,7 @@ namespace WallpaperToolBox
                     "从订阅壁纸目录和官方备份目录复制 " + m_NewSelectedIDList.Count + " 个壁纸到本地备份目录\n" +
                     "从订阅壁纸目录和官方备份目录复制并替换 " + m_ChangedSelectedIDList.Count + " 个壁纸到本地备份目录\n" +
                     "从本地备份目录删除 " + m_DelSelectedIDList.Count + " 个壁纸\n" +
-                    "操作执行后不可撤回！被替换和删除的壁纸不可恢复！";
+                    "删除的壁纸可以在回收站找回，被替换的壁纸不可恢复！";
                 if (Tools.ShowAskDialog(tip, m_UIForm))
                 {
                     panelUpdateState = VieweUpdateState.IsUpdating;
@@ -1559,7 +1559,7 @@ namespace WallpaperToolBox
                     "从订阅壁纸目录和官方备份目录删除 " + m_NewSelectedIDList.Count + " 个壁纸\n" +
                     "从本地备份目录复制并替换 " + m_ChangedSelectedIDList.Count + " 个壁纸到订阅壁纸目录和官方备份目录\n" +
                     "从本地备份目录复制 " + m_DelSelectedIDList.Count + " 个壁纸到官方备份目录\n" +
-                    "被替换和删除的订阅目录壁纸若未取消订阅，则会被steam恢复！";
+                    "被替换的订阅目录壁纸若未取消订阅，则会被steam恢复！";
                 if (Tools.ShowAskWarningAskDialog(tip, m_UIForm))
                 {
                     panelUpdateState = VieweUpdateState.IsUpdating;
@@ -1579,6 +1579,8 @@ namespace WallpaperToolBox
 
         public override void UpdatePanel()
         {
+            base.UpdatePanel();
+
             // 避免切换页面后清空列表
             if (panelUpdateState == VieweUpdateState.Updated)
             {
@@ -1588,20 +1590,6 @@ namespace WallpaperToolBox
             InitDataGridView(m_NewGridView, m_NewGridViewFooter);
             InitDataGridView(m_ChangedGridView, m_ChangedGridViewFooter);
             InitDataGridView(m_DelGridView, m_DelGridViewFooter);
-
-            base.UpdatePanel();
-        }
-
-        /// <summary>
-        /// 所有页面重载
-        /// </summary>
-        public void WaitForReloadAllPanels()
-        {
-            m_StorePanel.WaitForReload();
-            m_LocalBackupPanel.WaitForReload();
-            m_BackupPanel.WaitForReload();
-
-            WaitForReload();
         }
         #endregion 接口
 
@@ -1816,15 +1804,14 @@ namespace WallpaperToolBox
             var syncChangedList = GetSelectedWallpapers(m_ChangedWallpaperDic, m_ChangedSelectedIDList);
             var syncDelList = GetSelectedWallpapers(m_DelWallpaperDic, m_DelSelectedIDList);
 
-            string cmd;
+            string pathTo;
             float maxProgress = (syncNewList.Count + syncChangedList.Count + syncDelList.Count) * 1.1f;
             float progress = 0;
             // 复制新壁纸
             for (int i = 0; i < syncNewList.Count; i++)
             {
-                cmd = "XCOPY \"" + syncNewList[i].directoryPath + "\" \"" +
-                    SettingManager.setting.localBackupPath + syncNewList[i].id + "\\\" /e/y";
-                Tools.RunCMD(cmd);
+                pathTo = SettingManager.setting.localBackupPath + syncNewList[i].id + '\\';
+                Tools.CopyDirectory(syncNewList[i].directoryPath, pathTo);
 
                 progress = (i + 1) / maxProgress * 100;
                 m_SyncProgressWorker.ReportProgress((int)progress);
@@ -1834,9 +1821,8 @@ namespace WallpaperToolBox
             // 复制并替换变更壁纸
             for (int i = 0; i < syncChangedList.Count; i++)
             {
-                cmd = "XCOPY \"" + syncChangedList[i].directoryPath + "\" \"" +
-                    SettingManager.setting.localBackupPath + syncChangedList[i].id + "\\\" /e/y";
-                Tools.RunCMD(cmd);
+                pathTo = SettingManager.setting.localBackupPath + syncChangedList[i].id + '\\';
+                Tools.CopyDirectory(syncChangedList[i].directoryPath, pathTo);
 
                 progress = (i + 1 + syncNewList.Count) / maxProgress * 100;
                 m_SyncProgressWorker.ReportProgress((int)progress);
@@ -1846,8 +1832,7 @@ namespace WallpaperToolBox
             // 删除旧壁纸
             for (int i = 0; i < syncDelList.Count; i++)
             {
-                cmd = "rmdir /s/q \"" + syncDelList[i].directoryPath + "\"";
-                Tools.RunCMD(cmd);
+                Tools.DeleteDirectory(syncDelList[i].directoryPath);
 
                 progress = (i + 1 + syncNewList.Count + syncChangedList.Count) / maxProgress * 100;
                 m_SyncProgressWorker.ReportProgress((int)progress);
@@ -1870,7 +1855,7 @@ namespace WallpaperToolBox
             if (progress >= 100)
             {
                 m_ProgressBar.Hide();
-                WaitForReloadAllPanels();
+                WaitForReload();
                 UpdatePanel();
             }
         }
@@ -1884,14 +1869,13 @@ namespace WallpaperToolBox
             var rollbackChangedList = GetSelectedWallpapers(m_ChangedWallpaperDic, m_ChangedSelectedIDList);
             var rollbackDelList = GetSelectedWallpapers(m_DelWallpaperDic, m_DelSelectedIDList);
 
-            string cmd;
+            string path;
             float maxProgress = (rollbackNewList.Count + rollbackChangedList.Count + rollbackDelList.Count) * 1.1f;
             float progress;
             // 删除新壁纸（已订阅的壁纸删了steam还会重下）
             for (int i = 0; i < rollbackNewList.Count; i++)
             {
-                cmd = "rmdir /s/q \"" + rollbackNewList[i].directoryPath + "\"";
-                Tools.RunCMD(cmd);
+                Tools.DeleteDirectory(rollbackNewList[i].directoryPath);
 
                 progress = (i + 1) / maxProgress * 100;
                 m_RollbackProgressWorker.ReportProgress((int)progress);
@@ -1901,10 +1885,8 @@ namespace WallpaperToolBox
             // 复制并替换新壁纸
             for (int i = 0; i < rollbackChangedList.Count; i++)
             {
-                cmd = "XCOPY \"" + SettingManager.setting.localBackupPath +
-                    rollbackChangedList[i].id + "\" \"" +
-                    rollbackChangedList[i].directoryPath + "\" /e/y";
-                Tools.RunCMD(cmd);
+                path = SettingManager.setting.localBackupPath + rollbackChangedList[i].id + '\\';
+                Tools.CopyDirectory(path, rollbackChangedList[i].directoryPath);
 
                 progress = (i + 1 + rollbackNewList.Count) / maxProgress * 100;
                 m_RollbackProgressWorker.ReportProgress((int)progress);
@@ -1914,9 +1896,8 @@ namespace WallpaperToolBox
             // 复制旧壁纸到官方备份目录
             for (int i = 0; i < rollbackDelList.Count; i++)
             {
-                cmd = "XCOPY \"" + rollbackDelList[i].directoryPath + "\" \"" +
-                    SettingManager.setting.backupPath + rollbackDelList[i].id + "\\\" /e/y";
-                Tools.RunCMD(cmd);
+                path = SettingManager.setting.backupPath + rollbackDelList[i].id + '\\';
+                Tools.CopyDirectory(rollbackDelList[i].directoryPath, path);
 
                 progress = (i + 1 + rollbackNewList.Count + rollbackChangedList.Count) / maxProgress * 100;
                 m_RollbackProgressWorker.ReportProgress((int)progress);
@@ -1939,7 +1920,7 @@ namespace WallpaperToolBox
             if (progress >= 100)
             {
                 m_ProgressBar.Hide();
-                WaitForReloadAllPanels();
+                WaitForReload();
                 UpdatePanel();
             }
         }
