@@ -179,6 +179,7 @@ namespace WallpaperToolBox
 
         /// <summary>
         /// 删除目录及其所有文件
+        /// <para>删除的文件放入回收站</para>
         /// </summary>
         public static void DeleteDirectory(string path)
         {
@@ -210,6 +211,12 @@ namespace WallpaperToolBox
         /// </summary>
         public static void CopyDirectory(string pathFrom, string pathTo)
         {
+            // 没法覆盖文件，只能先删除旧文件
+            if (Directory.Exists(pathTo))
+            {
+                DeleteDirectory(pathTo);
+            }
+
             SHFILEOPSTRUCT fileOp = new SHFILEOPSTRUCT
             {
                 hwnd = IntPtr.Zero,
