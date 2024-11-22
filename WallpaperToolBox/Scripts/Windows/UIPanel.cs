@@ -389,8 +389,25 @@ namespace WallpaperToolBox
             protected set
             {
                 m_PanelUpdateState = value;
-                // 用新线程是因为在主线程延迟更新会有进度条UIBug
-                Task.Run(AfterUpdateStateChanged);
+
+                if (panelUpdateState != VieweUpdateState.Updated)
+                {
+                    m_EverySwitch.ReadOnly = true;
+                    m_QuestionableSwitch.ReadOnly = true;
+                    m_MatureSwitch.ReadOnly = true;
+                }
+                else
+                {
+                    // 用新线程是因为在主线程延迟更新会有进度条UIBug
+                    Task.Run(() =>
+                    {
+                        // 延迟一点更新，避免快速切换年龄分级导致显示bug
+                        Thread.Sleep(100);
+                        m_EverySwitch.ReadOnly = false;
+                        m_QuestionableSwitch.ReadOnly = false;
+                        m_MatureSwitch.ReadOnly = false;
+                    });
+                }
             }
         }
 
@@ -566,27 +583,6 @@ namespace WallpaperToolBox
         protected virtual void ClearAllSelectedList()
         {
             m_SelectedIndexList.Clear();
-        }
-
-        /// <summary>
-        /// 更新状态变化后
-        /// </summary>
-        protected virtual void AfterUpdateStateChanged()
-        {
-            if (panelUpdateState != VieweUpdateState.Updated)
-            {
-                m_EverySwitch.ReadOnly = true;
-                m_QuestionableSwitch.ReadOnly = true;
-                m_MatureSwitch.ReadOnly = true;
-            }
-            else
-            {
-                // 延迟一点更新，避免快速切换年龄分级导致显示bug
-                Thread.Sleep(100);
-                m_EverySwitch.ReadOnly = false;
-                m_QuestionableSwitch.ReadOnly = false;
-                m_MatureSwitch.ReadOnly = false;
-            }
         }
 
         /// <summary>
@@ -940,8 +936,11 @@ namespace WallpaperToolBox
             if (m_WallpaperLoader.isLoaded && m_ProgressBar.Value >= 100)
             {
                 m_InformationGroupBox.Init();
-                m_ProgressBar.Hide();
-                m_ProgressBar.Value = 0;
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 panelUpdateState = VieweUpdateState.Updated;
                 AfterUpdateSelectRange();
             }
@@ -978,7 +977,11 @@ namespace WallpaperToolBox
 
             if (progress >= 100)
             {
-                m_ProgressBar.Hide();
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 UpdatePanel();
             }
         }
@@ -1040,7 +1043,11 @@ namespace WallpaperToolBox
 
             if (progress >= 100)
             {
-                m_ProgressBar.Hide();
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 panelUpdateState = VieweUpdateState.Updated;
                 UpdateSelectedIndexListRange(0, m_WallpaperList.Count - 1, false);
                 unpackPanel.WaitForReload();
@@ -1079,7 +1086,11 @@ namespace WallpaperToolBox
 
             if (progress >= 100)
             {
-                m_ProgressBar.Hide();
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 panelUpdateState = VieweUpdateState.Updated;
                 UpdateSelectedIndexListRange(0, m_WallpaperList.Count - 1, false);
                 backupPanel.WaitForReload();
@@ -1748,8 +1759,11 @@ namespace WallpaperToolBox
             {
                 InitInformationGroupBoxs();
                 UpdateGridViewFooters();
-                m_ProgressBar.Hide();
-                m_ProgressBar.Value = 0;
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 panelUpdateState = VieweUpdateState.Updated;
             }
 
@@ -1854,7 +1868,11 @@ namespace WallpaperToolBox
 
             if (progress >= 100)
             {
-                m_ProgressBar.Hide();
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 WaitForReload();
                 UpdatePanel();
             }
@@ -1919,7 +1937,11 @@ namespace WallpaperToolBox
 
             if (progress >= 100)
             {
-                m_ProgressBar.Hide();
+                Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    m_ProgressBar.Hide();
+                });
                 WaitForReload();
                 UpdatePanel();
             }
