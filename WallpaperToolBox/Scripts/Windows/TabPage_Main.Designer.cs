@@ -30,16 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TabPage_Main));
             this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.uiTextBox3 = new Sunny.UI.UITextBox();
             this.uiTextBox2 = new Sunny.UI.UITextBox();
             this.uiTextBox1 = new Sunny.UI.UITextBox();
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiGroupBox1.SuspendLayout();
-            this.uiGroupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.uiGroupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // uiGroupBox1
@@ -67,6 +67,15 @@
             this.uiGroupBox1.TabIndex = 20;
             this.uiGroupBox1.Text = "介绍";
             this.uiGroupBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.InitialImage = null;
+            this.pictureBox2.Location = new System.Drawing.Point(280, 260);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(441, 381);
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
             // 
             // uiTextBox3
             // 
@@ -160,6 +169,7 @@
             this.uiLabel1.StyleCustomMode = true;
             this.uiLabel1.TabIndex = 6;
             this.uiLabel1.Text = resources.GetString("uiLabel1.Text");
+            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // uiGroupBox2
             // 
@@ -183,15 +193,6 @@
             this.uiGroupBox2.Text = "使用";
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.InitialImage = null;
-            this.pictureBox2.Location = new System.Drawing.Point(280, 260);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(441, 381);
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            // 
             // uiLabel2
             // 
             this.uiLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -203,6 +204,7 @@
             this.uiLabel2.StyleCustomMode = true;
             this.uiLabel2.TabIndex = 7;
             this.uiLabel2.Text = resources.GetString("uiLabel2.Text");
+            this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // TabPage_Main
             // 
@@ -216,8 +218,8 @@
             this.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
             this.Size = new System.Drawing.Size(1040, 1070);
             this.uiGroupBox1.ResumeLayout(false);
-            this.uiGroupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.uiGroupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

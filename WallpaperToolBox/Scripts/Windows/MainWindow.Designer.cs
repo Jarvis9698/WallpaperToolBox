@@ -50,6 +50,7 @@
             this.uiTabControlMenu1 = new Sunny.UI.UITabControlMenu();
             this.tabPage_Main = new System.Windows.Forms.TabPage();
             this.uiFlowLayoutPanel2 = new Sunny.UI.UIFlowLayoutPanel();
+            this.uiUserControl1 = new WallpaperToolBox.TabPage_Main();
             this.tabPage_Setting = new System.Windows.Forms.TabPage();
             this.backupPathGroupBox = new Sunny.UI.UIGroupBox();
             this.backupPathFindBtn = new Sunny.UI.UIButton();
@@ -118,6 +119,8 @@
             this.changedPanelSwitch1 = new Sunny.UI.UISwitch();
             this.changedPanelProcessBar = new Sunny.UI.UIProcessBar();
             this.uiFlowLayoutPanel1 = new Sunny.UI.UIFlowLayoutPanel();
+            this.uiGroupBox6 = new Sunny.UI.UIGroupBox();
+            this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
             this.uiLabel6 = new Sunny.UI.UILabel();
             this.newTypeLabel = new Sunny.UI.UILabel();
@@ -202,9 +205,6 @@
             this.unpackPreviewNameLabel1 = new Sunny.UI.UILabel();
             this.unpackPreviewPicture1 = new System.Windows.Forms.PictureBox();
             this.unpackFlowLayoutPanel1 = new Sunny.UI.UIFlowLayoutPanel();
-            this.uiGroupBox6 = new Sunny.UI.UIGroupBox();
-            this.uiLabel1 = new Sunny.UI.UILabel();
-            this.uiUserControl1 = new WallpaperToolBox.TabPage_Main();
             this.uiTabControlMenu1.SuspendLayout();
             this.tabPage_Main.SuspendLayout();
             this.uiFlowLayoutPanel2.SuspendLayout();
@@ -228,6 +228,7 @@
             this.tabPage2.SuspendLayout();
             this.uiPanel4.SuspendLayout();
             this.uiFlowLayoutPanel1.SuspendLayout();
+            this.uiGroupBox6.SuspendLayout();
             this.uiGroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.newPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newGridView)).BeginInit();
@@ -247,7 +248,6 @@
             this.uiGroupBox5.SuspendLayout();
             this.uiGroupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unpackPreviewPicture1)).BeginInit();
-            this.uiGroupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // uiTabControlMenu1
@@ -317,6 +317,22 @@
             this.uiFlowLayoutPanel2.TabIndex = 7;
             this.uiFlowLayoutPanel2.Text = "uiFlowLayoutPanel2";
             this.uiFlowLayoutPanel2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiUserControl1
+            // 
+            this.uiUserControl1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.uiUserControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
+            this.uiUserControl1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
+            this.uiUserControl1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.uiUserControl1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiUserControl1.Name = "uiUserControl1";
+            this.uiUserControl1.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.uiUserControl1.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
+            this.uiUserControl1.Size = new System.Drawing.Size(1040, 1070);
+            this.uiUserControl1.TabIndex = 0;
+            this.uiUserControl1.Text = null;
+            this.uiUserControl1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage_Setting
             // 
@@ -1592,6 +1608,46 @@
             this.uiFlowLayoutPanel1.TabIndex = 6;
             this.uiFlowLayoutPanel1.Text = "uiFlowLayoutPanel1";
             this.uiFlowLayoutPanel1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiGroupBox6
+            // 
+            this.uiGroupBox6.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.uiGroupBox6.Controls.Add(this.uiLabel1);
+            this.uiGroupBox6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
+            this.uiGroupBox6.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
+            this.uiGroupBox6.FillDisableColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
+            this.uiGroupBox6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiGroupBox6.ForeColor = System.Drawing.Color.White;
+            this.uiGroupBox6.Location = new System.Drawing.Point(9, 9);
+            this.uiGroupBox6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiGroupBox6.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiGroupBox6.Name = "uiGroupBox6";
+            this.uiGroupBox6.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiGroupBox6.Radius = 10;
+            this.uiGroupBox6.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(48)))));
+            this.uiGroupBox6.Size = new System.Drawing.Size(1022, 131);
+            this.uiGroupBox6.Style = Sunny.UI.UIStyle.Custom;
+            this.uiGroupBox6.StyleCustomMode = true;
+            this.uiGroupBox6.TabIndex = 23;
+            this.uiGroupBox6.Text = "重要提醒";
+            this.uiGroupBox6.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiLabel1
+            // 
+            this.uiLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiLabel1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel1.Location = new System.Drawing.Point(20, 40);
+            this.uiLabel1.Name = "uiLabel1";
+            this.uiLabel1.Size = new System.Drawing.Size(982, 70);
+            this.uiLabel1.Style = Sunny.UI.UIStyle.Custom;
+            this.uiLabel1.StyleCustomMode = true;
+            this.uiLabel1.TabIndex = 8;
+            this.uiLabel1.Text = "该页面的滚动列表有时会有一些显示Bug，如刷新后没有显示壁纸、已处理的壁纸行刷新后还在等Bug，遇到这些情况的时候可以通过分级按钮或重新读取按钮来手动刷新一下列表" +
+    "来解决。\r\n由于该Bug无法稳定复现，暂时没法修复，先这么用着吧。";
+            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // uiGroupBox1
             // 
@@ -3056,61 +3112,6 @@
             this.unpackFlowLayoutPanel1.Text = "uiFlowLayoutPanel1";
             this.unpackFlowLayoutPanel1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // uiGroupBox6
-            // 
-            this.uiGroupBox6.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.uiGroupBox6.Controls.Add(this.uiLabel1);
-            this.uiGroupBox6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
-            this.uiGroupBox6.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
-            this.uiGroupBox6.FillDisableColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
-            this.uiGroupBox6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiGroupBox6.ForeColor = System.Drawing.Color.White;
-            this.uiGroupBox6.Location = new System.Drawing.Point(9, 9);
-            this.uiGroupBox6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiGroupBox6.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiGroupBox6.Name = "uiGroupBox6";
-            this.uiGroupBox6.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox6.Radius = 10;
-            this.uiGroupBox6.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(48)))));
-            this.uiGroupBox6.Size = new System.Drawing.Size(1022, 131);
-            this.uiGroupBox6.Style = Sunny.UI.UIStyle.Custom;
-            this.uiGroupBox6.StyleCustomMode = true;
-            this.uiGroupBox6.TabIndex = 23;
-            this.uiGroupBox6.Text = "重要提醒";
-            this.uiGroupBox6.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // uiLabel1
-            // 
-            this.uiLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.uiLabel1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel1.Location = new System.Drawing.Point(20, 40);
-            this.uiLabel1.Name = "uiLabel1";
-            this.uiLabel1.Size = new System.Drawing.Size(982, 70);
-            this.uiLabel1.Style = Sunny.UI.UIStyle.Custom;
-            this.uiLabel1.StyleCustomMode = true;
-            this.uiLabel1.TabIndex = 8;
-            this.uiLabel1.Text = "该页面的滚动列表有时会有一些显示Bug，如刷新后没有显示壁纸、已处理的壁纸行刷新后还在等Bug，遇到这些情况的时候可以通过分级按钮或重新读取按钮来手动刷新一下列表" +
-    "来解决。\r\n由于该Bug无法稳定复现，暂时没法修复，先这么用着吧。";
-            // 
-            // uiUserControl1
-            // 
-            this.uiUserControl1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.uiUserControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
-            this.uiUserControl1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(136)))), ((int)(((byte)(134)))));
-            this.uiUserControl1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.uiUserControl1.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiUserControl1.Name = "uiUserControl1";
-            this.uiUserControl1.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
-            this.uiUserControl1.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
-            this.uiUserControl1.Size = new System.Drawing.Size(1040, 1070);
-            this.uiUserControl1.TabIndex = 0;
-            this.uiUserControl1.Text = null;
-            this.uiUserControl1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // MainWindow
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -3151,6 +3152,7 @@
             this.tabPage2.ResumeLayout(false);
             this.uiPanel4.ResumeLayout(false);
             this.uiFlowLayoutPanel1.ResumeLayout(false);
+            this.uiGroupBox6.ResumeLayout(false);
             this.uiGroupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.newPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newGridView)).EndInit();
@@ -3170,7 +3172,6 @@
             this.uiGroupBox5.ResumeLayout(false);
             this.uiGroupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.unpackPreviewPicture1)).EndInit();
-            this.uiGroupBox6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

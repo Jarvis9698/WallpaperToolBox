@@ -371,6 +371,7 @@ namespace WallpaperToolBox
         /// 每次刷新的壁纸数量
         /// </summary>
         protected int m_UpdateWallpaperNum = 100;
+        protected static SynchronizationContext synchronizationContext;
         /// <summary>
         /// 是否已启动
         /// </summary>
@@ -420,6 +421,8 @@ namespace WallpaperToolBox
             UISwitch questionableSwitch,
             UISwitch matureSwitch)
         {
+            synchronizationContext = SynchronizationContext.Current;
+
             // UI初始化
             m_UIForm = uIForm;
             m_ProgressBar = processBar;
@@ -939,7 +942,7 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ => m_ProgressBar.Hide(), null);
                 });
                 panelUpdateState = VieweUpdateState.Updated;
                 AfterUpdateSelectRange();
@@ -980,7 +983,7 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ => m_ProgressBar.Hide(), null);
                 });
                 UpdatePanel();
             }
@@ -1046,7 +1049,7 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ => m_ProgressBar.Hide(), null);
                 });
                 panelUpdateState = VieweUpdateState.Updated;
                 UpdateSelectedIndexListRange(0, m_WallpaperList.Count - 1, false);
@@ -1089,7 +1092,7 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ => m_ProgressBar.Hide(), null);
                 });
                 panelUpdateState = VieweUpdateState.Updated;
                 UpdateSelectedIndexListRange(0, m_WallpaperList.Count - 1, false);
@@ -1762,7 +1765,7 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ => m_ProgressBar.Hide(), null);
                 });
                 panelUpdateState = VieweUpdateState.Updated;
             }
@@ -1871,10 +1874,13 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ =>
+                    {
+                        m_ProgressBar.Hide();
+                        WaitForReload();
+                        UpdatePanel();
+                    }, null);
                 });
-                WaitForReload();
-                UpdatePanel();
             }
         }
 
@@ -1940,10 +1946,13 @@ namespace WallpaperToolBox
                 Task.Run(() =>
                 {
                     Thread.Sleep(100);
-                    m_ProgressBar.Hide();
+                    synchronizationContext.Send(_ =>
+                    {
+                        m_ProgressBar.Hide();
+                        WaitForReload();
+                        UpdatePanel();
+                    }, null);
                 });
-                WaitForReload();
-                UpdatePanel();
             }
         }
         #endregion 后台

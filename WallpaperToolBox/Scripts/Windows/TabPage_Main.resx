@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="uiLabel1.Text" xml:space="preserve">
-    <value>本软件用于备份管理、变更比对以及解包WallpaperEngine（以下称为小红车）的壁纸，以避免因小红车隐藏、删除用户珍藏的壁纸所造成的壁纸损失。
+    <value>本软件用于备份管理、变更比对以及解包WallpaperEngine（以下称为小红车）的壁纸，以避免因Steam下架、删除用户珍藏的壁纸所造成的壁纸损失。
 主要功能模块有：
 1、订阅壁纸管理：管理从Steam创意工坊订阅并下载的壁纸。
 2、本地备份管理：管理本地备份的壁纸，需要本地准备一个目录，用于存放所有壁纸在本地的备份，在Steam取消订阅并删除壁纸并
      不会影响本地备份的壁纸。
-3、官方备份管理：管理小红车软件目录内backup目录的壁纸，若用户保留的壁纸已经下架或被Steam删除，可以将壁纸复制到该目录
+3、官方备份管理：管理小红车软件目录内backup目录的壁纸，若用户保留的壁纸已经被Steam下架或删除，可以将壁纸复制到该目录
      内，重启小红车即可正常使用这些绝版壁纸。
 4、解包壁纸管理：管理和查看已经解包的壁纸。本软件集成了解包场景壁纸的功能，需要用户提供一个存放解包后壁纸的目录，所有
      解包后的壁纸都会放到这个目录用于管理。
